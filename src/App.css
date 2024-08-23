@@ -1,38 +1,64 @@
 .App {
-  text-align: center;
+    text-align: center;
+    background-color: #282c34;
+    min-height: 100vh;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.Pokedex {
+    width: 90%;
+    background-color: rgba(0, 51, 109, 0.2);
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1em;
+    padding: 1em;
+    user-select: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+#searchbar {
+    color: white;
+    background-color: #25243a;
+    outline: none;
+    padding: .4em;
+    font-size: 1rem;
+    width: 30vw;
+    margin: 2em 0 3em;
+    border-radius: 10px;
+    box-shadow: 0 0 30px 18px #363646;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.Pokecard {
+    background-color: rgba(0, 21, 48, 0.15);
+    border-radius: 10px;
+    font-size: 1.4em;
 }
 
-.App-link {
-  color: #61dafb;
+.Images {
+    position: relative;
+    display: flex;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.Pokeimage {
+    width: 160px;
+    height: 160px;
+    -webkit-user-drag: none;
+    position: relative;
+}
+
+.Pokeshiny {
+    opacity: 0;
+    position: absolute;
+    transition: all linear 200ms;
+}
+
+.Pokeshiny:hover {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.04);
+    border-radius: 50%;
 }
