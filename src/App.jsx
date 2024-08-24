@@ -6,30 +6,30 @@ function App() {
     const [pokedex, setPokedex] = useState([]) // Pokedex da primeira geração (151 pokémons)
     const [pokemons, setPokemons] = useState([]) // Pokémons que estarão visíveis na tela (Existe por motivo de performance de busca)
 
-    async function getPokedex(limit) { // Deve ser executado apenas uma vez
+    //     poke.sort(function (a, b) { // Organiza os pokémons
+    //         if (a.id > b.id) { return 1 }
+    //         if (a.id < b.id) { return -1 }
+    //         return 0
+    //     })
 
-        if (typeof limit !== 'number') throw new Error("Pokemon limit expected to be a number")
+    async function getPokemons(limit) { // Deve ser executado apenas uma vez
+        const pokelist = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}`)
 
-        const pokelist = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}`).then(res => res.json()).then(response => {
-            const poke = []
+        const pokelistData = await pokelist.json()
 
-            const promises = response.results.map(async x => {
-                await fetch(x.url).then(res => res.json()).then(pokemon => poke.push(pokemon))
-            })
+        const urls = pokelistData.results.map(pokemon => pokemon.url)
 
-            Promise.all(promises).then(() => {
-                poke.sort(function (a, b) { // Organiza os pokémons
-                    if (a.id > b.id) { return 1 }
-                    if (a.id < b.id) { return -1 }
-                    return 0
-                })
-            })
-            return poke
-        })
+        const promises = await Promise.all(urls.map(x => fetch(x)))
 
-        setPokedex(pokelist)
-        setPokemons(pokelist)
+        const data = await Promise.all(promises.map(response => response.json()))
+
+        return data
     }
+
+
+
+
+
 
     function search(string) {
         const searchResult = []
@@ -41,7 +41,20 @@ function App() {
         setPokemons(!string ? pokedex : searchResult)
     }
 
-    useEffect(() => { getPokedex(151) }, [])
+
+
+    useEffect(() => {
+        async function fetchPokemons(quantity) {
+            const pokemonsData = await getPokemons(quantity)
+            setPokedex(pokemonsData)
+            setPokemons(pokemonsData)
+
+            console.log(pokemonsData[13].sprites.front_default)
+        }
+
+        fetchPokemons(151)
+
+    }, [])
 
     return (
         <div className="App">
