@@ -5,12 +5,8 @@ import Pokecard from './components/Pokecard';
 function App() {
     const [pokedex, setPokedex] = useState([]) // Pokedex da primeira geração (151 pokémons)
     const [pokemons, setPokemons] = useState([]) // Pokémons que estarão visíveis na tela (Existe por motivo de performance de busca)
-
-    //     poke.sort(function (a, b) { // Organiza os pokémons
-    //         if (a.id > b.id) { return 1 }
-    //         if (a.id < b.id) { return -1 }
-    //         return 0
-    //     })
+    const [hasPokemon, setHasPokemon] = useState(true)
+    const [shiny, setShiny] = useState(false)
 
     async function getPokemons(limit) { // Deve ser executado apenas uma vez
         const pokelist = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}`)
@@ -26,11 +22,6 @@ function App() {
         return data
     }
 
-
-
-
-
-
     function search(string) {
         const searchResult = []
 
@@ -39,17 +30,43 @@ function App() {
         })
 
         setPokemons(!string ? pokedex : searchResult)
+
+        if (searchResult.length < 1) setHasPokemon(false)
+        else setHasPokemon(true)
     }
 
+    function toggleShiny(event) {
+        const pokeArray = document.querySelectorAll('.Pokeshiny')
 
+        switch (shiny) {
+            case false:
+                pokeArray.forEach(poke => {
+                    const classes = poke.classList
+                    const haveClass = classes.contains('ShinyVisible')
+                    if (!haveClass) classes.add('ShinyVisible')
+                })
+                setShiny(x => !x)
+                break
+
+            case true:
+                pokeArray.forEach(poke => {
+                    const classes = poke.classList
+                    const haveClass = classes.contains('ShinyVisible')
+                    if (haveClass) classes.remove('ShinyVisible')
+                })
+                setShiny(x => !x)
+                break
+        }
+
+        const button = event.currentTarget
+        button.classList.toggle("toggleShinyActive")
+    }
 
     useEffect(() => {
         async function fetchPokemons(quantity) {
             const pokemonsData = await getPokemons(quantity)
             setPokedex(pokemonsData)
             setPokemons(pokemonsData)
-
-            console.log(pokemonsData[13].sprites.front_default)
         }
 
         fetchPokemons(151)
@@ -59,10 +76,16 @@ function App() {
     return (
         <div className="App">
             <header>
-                <input type="text" id="searchbar" autoComplete='false' onChange={(e) => search(e.target.value)} />
+                <img src="https://imagensemoldes.com.br/wp-content/uploads/2020/04/Pok%C3%A9mon-PNG.png" alt="Pokemon" className='logo' />
+                <div className='headerRight'>
+                    <button className='toggleShiny' onClick={(e) => toggleShiny(e)}>Toggle all</button>
+                    <input type="text" id="searchbar" placeholder='Search...' autoComplete='false' onChange={(e) => search(e.target.value)} />
+
+                </div>
 
             </header>
-            <div className="Pokedex">
+            <div className={pokedex.length < 1 ? "Pokedex Invisible" : "Pokedex"}>
+                {hasPokemon ? null : <p className="notfind">Nenhum pokémon foi encontrado!</p>}
                 {pokemons.map((pokemon) => { return (<Pokecard key={pokemon.id} pokemon={pokemon} />) })}
             </div>
         </div>

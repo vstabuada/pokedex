@@ -9,8 +9,36 @@
 
 }
 
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.075);
+    width: 100%;
+    height: 6em;
+    margin-bottom: 4em;
+    justify-content: space-between;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.logo {
+    height: 60%;
+    margin: 0 10em;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.headerRight {
+    margin: 0 10em;
+    display: flex;
+    gap: 3em;
+}
+
 .Pokedex {
-    width: 90%;
+    max-width: 90%;
     background-color: rgba(0, 51, 109, 0.2);
     border-radius: 12px;
     display: flex;
@@ -21,16 +49,65 @@
     user-select: none;
 }
 
+.Invisible {
+    display: none;
+}
+
+.notfind {
+    font-size: 2em;
+    margin: 0 .6em;
+    text-shadow: 6px 6px 10px black;
+}
+
 #searchbar {
     color: white;
-    background-color: #25243a;
+    background-color: rgba(0, 0, 0, 0.153);
     outline: none;
     padding: .4em;
     font-size: 1rem;
-    width: 30vw;
-    margin: 2em 0 3em;
+    width: 4em;
     border-radius: 10px;
+    cursor: pointer;
+    transition: all ease-in-out 150ms;
+    user-select: none;
+    border: solid rgb(48, 49, 63);
+}
+
+#searchbar:focus {
+    background-color: #25243a;
     box-shadow: 0 0 30px 18px #363646;
+    width: 14em;
+    cursor: text;
+    border: solid rgb(56, 57, 77);
+}
+
+.toggleShiny {
+    padding: .4em .8em;
+    background-color: #27335a;
+    color: white;
+    border: solid rgba(199, 199, 199, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    user-select: none;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+.toggleShiny:hover {
+    background-color: rgb(81, 86, 117);
+}
+
+.toggleShiny:active {
+    background-color: rgb(73, 73, 121);
+}
+
+.toggleShinyActive {
+    background-color: rgba(151, 255, 151, 0.527);
+
+}
+
+.toggleShinyActive:hover {
+    background-color: rgba(255, 107, 107, 0.514);
 }
 
 .Pokecard {
@@ -41,11 +118,25 @@
     width: 160px;
     height: 230px;
     padding: 8px;
+
+    transition: all ease-in-out 100ms;
+}
+
+.Pokecard:hover {
+    transform: scale(110%) translateY(-20px);
+    background-color: rgba(85, 115, 155, 0.15);
 }
 
 .Images {
     position: relative;
     display: flex;
+    transition: all ease-in-out 200ms;
+}
+
+.Images:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.04);
+    border-radius: 50%;
 }
 
 .Pokeimage {
@@ -53,7 +144,9 @@
     height: 160px;
     -webkit-user-drag: none;
     position: relative;
+
 }
+
 
 .Pokeshiny {
     opacity: 0;
@@ -61,8 +154,8 @@
     transition: all linear 200ms;
 }
 
-.Pokeshiny:hover {
+.ShinyVisible {
     opacity: 1;
-    background-color: rgba(255, 255, 255, 0.04);
+    background-color: rgba(0, 51, 109, 0.2);
     border-radius: 50%;
 }
