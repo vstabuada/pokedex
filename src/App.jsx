@@ -23,11 +23,7 @@ function App() {
     }
 
     function search(string) {
-        const searchResult = []
-
-        pokedex.map((poke) => {
-            if (poke.name.includes(string.toLowerCase())) searchResult.push(poke)
-        })
+        const searchResult = pokedex.filter(poke => poke.name.includes(string.toLowerCase()))
 
         setPokemons(!string ? pokedex : searchResult)
 
@@ -41,19 +37,18 @@ function App() {
         switch (shiny) {
             case false:
                 pokeArray.forEach(poke => {
-                    const classes = poke.classList
-                    const haveClass = classes.contains('ShinyVisible')
-                    if (!haveClass) classes.add('ShinyVisible')
+                    const haveClass = poke.classList.contains('ShinyVisible')
+                    if (!haveClass) poke.classList.add('ShinyVisible')
                 })
                 setShiny(x => !x)
                 break
 
             case true:
                 pokeArray.forEach(poke => {
-                    const classes = poke.classList
-                    const haveClass = classes.contains('ShinyVisible')
-                    if (haveClass) classes.remove('ShinyVisible')
+                    const haveClass = poke.classList.contains('ShinyVisible')
+                    if (haveClass) poke.classList.remove('ShinyVisible')
                 })
+
                 setShiny(x => !x)
                 break
         }

@@ -1,14 +1,12 @@
-import { useState } from "react"
-
 function Pokecard({ pokemon }) {
-    const [shiny, setShiny] = useState(false)
+
     const name = pokemon.name.slice(0, 1).toUpperCase() + pokemon.name.slice(-pokemon.name.length + 1)
 
     return (
         <div className="Pokecard">
             <div className="Images" onClick={(e) => { e.target.className.includes("ShinyVisible") ? e.target.className = "Pokeimage Pokeshiny" : e.target.className += " ShinyVisible" }}>
                 <img className="Pokeimage" src={pokemon.sprites.front_default} alt={pokemon.name} ></img>
-                <img className={shiny ? "Pokeimage Pokeshiny ShinyVisible" : "Pokeimage Pokeshiny"} src={pokemon.sprites.front_shiny} alt={pokemon.name} ></img>
+                <img className="Pokeimage Pokeshiny" src={pokemon.sprites.front_shiny} alt={pokemon.name} ></img>
             </div>
             <p className="Pokename">{name}</p>
         </div>
