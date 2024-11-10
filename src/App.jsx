@@ -1,6 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import Pokecard from './components/Pokecard';
+import Pokecard from './components/Pokecard/Pokecard';
 
 function App() {
     const [pokedex, setPokedex] = useState([]) // Pokedex da primeira geração (151 pokémons)
@@ -10,12 +10,13 @@ function App() {
 
     async function getPokemons(limit) { // Deve ser executado apenas uma vez
         const pokelist = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}`)
+            .catch(e => console.log(e))
 
         const pokelistData = await pokelist.json()
 
         const urls = pokelistData.results.map(pokemon => pokemon.url)
 
-        const promises = await Promise.all(urls.map(x => fetch(x)))
+        const promises = await Promise.all(urls.map(x => fetch(x).catch(e => console.log(e))))
 
         const data = await Promise.all(promises.map(response => response.json()))
 
@@ -23,7 +24,11 @@ function App() {
     }
 
     function search(string) {
-        const searchResult = pokedex.filter(poke => poke.name.includes(string.toLowerCase()))
+        const searchResult = pokedex.filter(poke => {
+            const name = `#${poke.id} ${poke.name}`
+
+            return name.includes(string.toLowerCase())
+        })
 
         setPokemons(!string ? pokedex : searchResult)
 
@@ -31,7 +36,7 @@ function App() {
         else setHasPokemon(true)
     }
 
-    function toggleShiny(event) {
+    function toggleAllShiny(event) {
         const pokeArray = document.querySelectorAll('.Pokeshiny')
 
         switch (shiny) {
@@ -55,6 +60,22 @@ function App() {
 
         const button = event.currentTarget
         button.classList.toggle("toggleShinyActive")
+
+        console.log(pokedex[39])
+    }
+
+    function showLoading() {
+        if (pokedex.length < 1) {
+            return (
+                <div className='Loading'>
+                    <div className="loading">
+                        <div id="dot1" className="dots"></div>
+                        <div id="dot2" className="dots"></div>
+                        <div id="dot3" className="dots"></div>
+                    </div>
+                </div>
+            )
+        }
     }
 
     useEffect(() => {
@@ -65,7 +86,6 @@ function App() {
         }
 
         fetchPokemons(151)
-
     }, [])
 
     return (
@@ -73,12 +93,12 @@ function App() {
             <header>
                 <img src="https://imagensemoldes.com.br/wp-content/uploads/2020/04/Pok%C3%A9mon-PNG.png" alt="Pokemon" className='logo' />
                 <div className='headerRight'>
-                    <button className='toggleShiny' onClick={(e) => toggleShiny(e)}>Toggle all</button>
+                    <button className='toggleShiny' onClick={(e) => toggleAllShiny(e)}>Toggle all</button>
                     <input type="text" id="searchbar" placeholder='Search...' autoComplete='false' onChange={(e) => search(e.target.value)} />
-
                 </div>
-
             </header>
+
+            {showLoading()}
             <div className={pokedex.length < 1 ? "Pokedex Invisible" : "Pokedex"}>
                 {hasPokemon ? null : <p className="notfind">Nenhum pokémon foi encontrado!</p>}
                 {pokemons.map((pokemon) => { return (<Pokecard key={pokemon.id} pokemon={pokemon} />) })}
