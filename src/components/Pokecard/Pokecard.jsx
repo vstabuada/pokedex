@@ -27,6 +27,8 @@ function Pokecard({ pokemon }) {
         return typesData
     }
 
+    // ksjdfjaskjjdfkjasdf
+
     useEffect(() => {
 
         async function setTypeIcon() {
